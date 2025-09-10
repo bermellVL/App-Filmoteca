@@ -1,2 +1,4 @@
 # App-Filmoteca
-Es una aplicacion en Python para recomendar peliculas en base a una pelicula que tu le indiques 
+Cinevisor: Tu Recomendador de PelículasDescripciónCinevisor es una aplicación de consola en Python que usa la API de TMDB para buscar y recomendar películas. El motor de recomendación te sugiere títulos que te encantarán basándose en los géneros de tus películas favoritas.CaracterísticasBusca películas por nombre y muestra sus detalles clave.Recomienda películas similares a partir de sus géneros.Las recomendaciones se ordenan con precisión para mostrarte las mejores opciones.¿Cómo Funciona?Busca una película, selecciona una de la lista, y la aplicación usará sus géneros para encontrar y mostrarte las mejores recomendaciones.TecnologíasPythonPandasRequestsAPI de TMDBUsoInstala las librerías necesarias:pip install requests pandas
+Añade tu clave de API de TMDB al código.Ejecuta el script:python tu_script.py
+
