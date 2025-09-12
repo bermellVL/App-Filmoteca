@@ -1,14 +1,27 @@
 ﻿import requests
 import pandas as pd
 import json
+import os
+import sys
+from dotenv import load_dotenv
 
-# API Key de TMDB
-TMDB_API_KEY = "0e1b521bb784d936b178e6dc486eeabf"
+# Cargar variables de entorno desde el archivo .env
+load_dotenv()
 
-# AQUI DEBES PONER TU API KEY DE GEMINI.
-# La puedes puedes obtener de forma gratuita en Google AI Studio.
-GEMINI_API_KEY = "AIzaSyAz23_TaXr0hkmKzcOMoSQhx2DrkPyqy1U"
-GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent"
+# API Keys de TMDB y Gemini
+TMDB_API_KEY = os.getenv("TMDB_API_KEY")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+# Verificación de las API keys
+if not TMDB_API_KEY or not GEMINI_API_KEY:
+    print("Error: No se encontraron las claves de API.")
+    print("Asegúrate de tener un archivo '.env' en el mismo directorio que 'Peliculas.py'")
+    print("y que contenga las siguientes líneas:")
+    print("TMDB_API_KEY=tu_clave_aqui")
+    print("GEMINI_API_KEY=tu_clave_aqui")
+    sys.exit()
+3
+GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
 
 def get_movie_details(movie_id):
     """Obtiene los detalles de una película por su ID y maneja errores."""
@@ -27,18 +40,25 @@ def get_ai_movie_titles(query):
     estructurar los títulos de películas.
     """
     # Se le pide a la IA que devuelva una lista numerada en lugar de JSON.
-    prompt = f"Basado en esta descripción, dame una lista numerada de 5 títulos de películas que puedan coincidir. Responde únicamente con la lista de títulos, sin texto adicional, por ejemplo: \n1. Título 1\n2. Título 2\n...\n\nDescripción: \"{query}\". Si no hay resultados, devuelve una lista vacía. Si un título no está disponible, no lo incluyas."
+    prompt = f"""Basado en esta descripción, dame una lista numerada de 5 títulos de películas que puedan coincidir. Responde únicamente con la lista de títulos, sin texto adicional, por ejemplo: 
+1. Título 1
+2. Título 2
+...
+
+Descripción: "{query}". Si no hay resultados, devuelve una lista vacía. Si un título no está disponible, no lo incluyas."""
     
     payload = {
         "contents": [{"parts": [{"text": prompt}]}],
-        "tools": [{"google_search": {}}]
     }
     
-    headers = {'Content-Type': 'application/json'}
+    headers = {
+        'Content-Type': 'application/json',
+        'X-goog-api-key': GEMINI_API_KEY
+    }
     
     try:
         response = requests.post(
-            f"{GEMINI_API_URL}?key={GEMINI_API_KEY}",
+            GEMINI_API_URL,
             headers=headers,
             data=json.dumps(payload)
         )
@@ -69,6 +89,7 @@ def get_ai_movie_titles(query):
         print(f"Error en la petición a la API de Gemini o al procesar la respuesta: {e}")
         return None
 
+
 def get_movies_by_genres(genre_ids, num_pages=3):
     """
     Busca películas por género en múltiples páginas.
@@ -92,7 +113,7 @@ def get_movies_by_genres(genre_ids, num_pages=3):
 
 def search_by_description():
     """Lógica para buscar películas por descripción usando Gemini."""
-    print("¡Bienvenido a Cinevisor!")
+    print("¡Bienvenido a App-Filmoteca!")
     print("Describe una película con tus propias palabras.")
     print("Ejemplo: 'Una película de acción de los 90 sobre dinosaurios'")
     
@@ -200,7 +221,7 @@ def recommend_movies():
         print(f"Error de conexión: {e}. Por favor, revisa tu conexión a Internet o tu clave de API.")
 
 
-# --- INICIO DEL PROGRAMA PRINCIPAL ---
+# --- INICIO DEL PROGRAMA PRINCIPAL --- 
 def main():
     while True:
         print("\n--- MENÚ PRINCIPAL ---")

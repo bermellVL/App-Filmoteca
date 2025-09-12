@@ -1,0 +1,3 @@
+# Ignorar el fichero de variables de entorno
+.env
+GEMINI.md
