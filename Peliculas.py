@@ -20,7 +20,7 @@ if not TMDB_API_KEY or not GEMINI_API_KEY:
     print("TMDB_API_KEY=tu_clave_aqui")
     print("GEMINI_API_KEY=tu_clave_aqui")
     sys.exit()
-3
+    
 GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
 
 def get_movie_details(movie_id):
